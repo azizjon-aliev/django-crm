@@ -1,0 +1,230 @@
+{% extends 'common/base.html' %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <h2 class="mb-4">{% trans "Добавить обращение" %}</h2>
+
+    <!-- Display form-level errors -->
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>{% trans "Ошибка!" %}</strong> {% trans "Пожалуйста, исправьте ошибки ниже." %}
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        <!-- Basic Information -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="{{ form.first_name.id_for_label }}" class="form-label">{% trans "Имя" %}</label>
+                {{ form.first_name|add_class:"form-control" }}
+                <!-- Display field-specific errors -->
+                {% if form.first_name.errors %}
+                    <div class="text-danger">
+                        {{ form.first_name.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <label for="{{ form.last_name.id_for_label }}" class="form-label">{% trans "Фамилия" %}</label>
+                {{ form.last_name|add_class:"form-control" }}
+                {% if form.last_name.errors %}
+                    <div class="text-danger">
+                        {{ form.last_name.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="{{ form.phone_number.id_for_label }}"
+                       class="form-label">{% trans "Номер телефона" %}</label>
+                {{ form.phone_number|add_class:"form-control" }}
+                {% if form.phone_number.errors %}
+                    <div class="text-danger">
+                        {{ form.phone_number.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <label for="{{ form.email.id_for_label }}" class="form-label">{% trans "Электронная почта" %}</label>
+                {{ form.email|add_class:"form-control" }}
+                {% if form.email.errors %}
+                    <div class="text-danger">
+                        {{ form.email.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Address -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="{{ form.address.id_for_label }}" class="form-label">{% trans "Адрес" %}</label>
+                {{ form.address|add_class:"form-control" }}
+                {% if form.address.errors %}
+                    <div class="text-danger">
+                        {{ form.address.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Request Details -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="{{ form.request_type.id_for_label }}" class="form-label">{% trans "Тип обращения" %}</label>
+                {{ form.request_type|add_class:"form-select" }}
+                {% if form.request_type.errors %}
+                    <div class="text-danger">
+                        {{ form.request_type.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <label for="{{ form.subject.id_for_label }}" class="form-label">{% trans "Тема" %}</label>
+                {{ form.subject|add_class:"form-control" }}
+                {% if form.subject.errors %}
+                    <div class="text-danger">
+                        {{ form.subject.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="{{ form.description.id_for_label }}"
+                       class="form-label">{% trans "Описание проблемы" %}</label>
+                {{ form.description|add_class:"form-control" }}
+                {% if form.description.errors %}
+                    <div class="text-danger">
+                        {{ form.description.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Contract and Service Information -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="{{ form.contract_number.id_for_label }}"
+                       class="form-label">{% trans "Лицевой счет/договор" %}</label>
+                {{ form.contract_number|add_class:"form-control" }}
+                {% if form.contract_number.errors %}
+                    <div class="text-danger">
+                        {{ form.contract_number.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <label for="{{ form.service_phone_number.id_for_label }}"
+                       class="form-label">{% trans "Номер телефона услуги" %}</label>
+                {{ form.service_phone_number|add_class:"form-control" }}
+                {% if form.service_phone_number.errors %}
+                    <div class="text-danger">
+                        {{ form.service_phone_number.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Service Type -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="{{ form.service_type.id_for_label }}" class="form-label">{% trans "Тип услуги" %}</label>
+                {{ form.service_type|add_class:"form-select" }}
+                {% if form.service_type.errors %}
+                    <div class="text-danger">
+                        {{ form.service_type.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <label for="{{ form.attachment.id_for_label }}"
+                       class="form-label">{% trans "Прикрепленный файл" %}</label>
+                {{ form.attachment|add_class:"form-control" }}
+                {% if form.attachment.errors %}
+                    <div class="text-danger">
+                        {{ form.attachment.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Preferred Contact Method -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="{{ form.preferred_contact_method.id_for_label }}"
+                       class="form-label">{% trans "Предпочтительный способ связи" %}</label>
+                {{ form.preferred_contact_method|add_class:"form-select" }}
+                {% if form.preferred_contact_method.errors %}
+                    <div class="text-danger">
+                        {{ form.preferred_contact_method.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <label for="{{ form.incident_date.id_for_label }}"
+                       class="form-label">{% trans "Дата и время инцидента" %}</label>
+                {{ form.incident_date|add_class:"form-control" }}
+                {% if form.incident_date.errors %}
+                    <div class="text-danger">
+                        {{ form.incident_date.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Status and Assigned To -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="{{ form.status.id_for_label }}" class="form-label">{% trans "Статус" %}</label>
+                {{ form.status|add_class:"form-select" }}
+                {% if form.status.errors %}
+                    <div class="text-danger">
+                        {{ form.status.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <label for="{{ form.assigned_to.id_for_label }}"
+                       class="form-label">{% trans "Ответственное лицо" %}</label>
+                {{ form.assigned_to|add_class:"form-select" }}
+                {% if form.assigned_to.errors %}
+                    <div class="text-danger">
+                        {{ form.assigned_to.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Internal Comment -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="{{ form.internal_comment.id_for_label }}"
+                       class="form-label">{% trans "Комментарий сотрудника" %}</label>
+                {{ form.internal_comment|add_class:"form-control" }}
+                {% if form.internal_comment.errors %}
+                    <div class="text-danger">
+                        {{ form.internal_comment.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">{% trans "Сохранить" %}</button>
+                <a href="{% url 'customer_support:requests_list' %}" class="btn btn-secondary">{% trans "Отмена" %}</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'common/base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <h2>{% trans "Детали обращения" %}</h2>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ request.subject }}</h5>
+            <p class="card-text">
+                <!-- Basic Information -->
+                <strong>{% trans "Имя" %}:</strong> {{ request.first_name }} {{ request.last_name }}<br>
+                <strong>{% trans "Номер телефона" %}:</strong> {{ request.phone_number }}<br>
+                <strong>{% trans "Электронная почта" %}:</strong> {{ request.email }}<br>
+                <strong>{% trans "Адрес" %}:</strong> {{ request.address|default:"-" }}<br>
+
+                <!-- Request Details -->
+                <strong>{% trans "Тип обращения" %}:</strong> {{ request.get_request_type_display }}<br>
+                <strong>{% trans "Тема" %}:</strong> {{ request.subject }}<br>
+                <strong>{% trans "Описание проблемы" %}:</strong> {{ request.description }}<br>
+
+                <!-- Contract and Service Information -->
+                <strong>{% trans "Лицевой счет/договор" %}:</strong> {{ request.contract_number|default:"-" }}<br>
+                <strong>{% trans "Номер телефона услуги" %}:</strong> {{ request.service_phone_number|default:"-" }}<br>
+                <strong>{% trans "Тип услуги" %}:</strong> {{ request.get_service_type_display|default:"-" }}<br>
+
+                <!-- Attachment -->
+                <strong>{% trans "Прикрепленный файл" %}:</strong>
+                {% if request.attachment %}
+                    <a href="{{ request.attachment.url }}" target="_blank">{% trans "Скачать файл" %}</a>
+                {% else %}
+                    <span class="text-muted">{% trans "Нет файла" %}</span>
+                {% endif %}<br>
+
+                <!-- Preferred Contact Method -->
+                <strong>{% trans "Предпочтительный способ связи" %}:</strong> {{ request.get_preferred_contact_method_display }}<br>
+
+                <!-- Incident Date -->
+                <strong>{% trans "Дата и время инцидента" %}:</strong> {{ request.incident_date|default:"-" }}<br>
+
+                <!-- Status -->
+                <strong>{% trans "Статус" %}:</strong>
+                <span class="badge
+                    {% if request.status == 'new' %}bg-secondary
+                    {% elif request.status == 'in_progress' %}bg-primary
+                    {% elif request.status == 'resolved' %}bg-success
+                    {% elif request.status == 'closed' %}bg-dark
+                    {% endif %}">
+                    {{ request.get_status_display }}
+                </span><br>
+
+                <!-- Assigned To -->
+                <strong>{% trans "Ответственное лицо" %}:</strong>
+                {% if request.assigned_to %}
+                    {{ request.assigned_to.get_full_name }}
+                {% else %}
+                    <span class="text-muted">{% trans "Не назначено" %}</span>
+                {% endif %}<br>
+
+                <!-- Internal Comment -->
+                <strong>{% trans "Комментарий сотрудника" %}:</strong>
+                {% if request.internal_comment %}
+                    {{ request.internal_comment }}
+                {% else %}
+                    <span class="text-muted">{% trans "Нет комментариев" %}</span>
+                {% endif %}<br>
+            </p>
+            <a href="{% url 'customer_support:requests_list' %}"
+               class="btn btn-secondary">{% trans "Назад к списку" %}</a>
+        </div>
+    </div>
+{% endblock %}
