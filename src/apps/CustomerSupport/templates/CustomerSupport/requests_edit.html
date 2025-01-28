@@ -44,7 +44,7 @@
         <!-- Поле: Номер телефона -->
         <div class="mb-3">
             <label for="{{ form.phone_number.id_for_label }}" class="form-label">{% trans "Номер телефона" %}</label>
-            {% render_field form.phone_number class="form-control" %}
+            {% render_field form.phone_number class="form-control" placeholder="+992XXXXXXXXX" %}
             {% if form.phone_number.errors %}
                 <div class="text-danger">
                     {{ form.phone_number.errors }}
@@ -77,7 +77,7 @@
         <!-- Поле: Тема обращения -->
         <div class="mb-3">
             <label for="{{ form.subject.id_for_label }}" class="form-label">{% trans "Тема обращения" %}</label>
-            {% render_field form.subject class="form-control" %}
+            {% render_field form.subject class="form-select" %}
             {% if form.subject.errors %}
                 <div class="text-danger">
                     {{ form.subject.errors }}
@@ -129,9 +129,71 @@
                 </div>
             {% endif %}
         </div>
+        <!-- Поле: Ответственное лицо -->
+        <div class="mb-3">
+            <label for="{{ form.assigned_to.id_for_label }}" class="form-label">
+                {% trans 'Ответственное лицо' %}
+            </label>
+
+            {% if form.status.value == "closed" or form.status.value == "resolved" %}
+                <!-- Отображаем поле как readonly и добавляем скрытый input -->
+                {% render_field form.assigned_to class="form-select" disabled="disabled" %}
+                <input type="hidden" name="{{ form.assigned_to.name }}" value="{{ form.assigned_to.value }}">
+            {% else %}
+                {% render_field form.assigned_to class="form-select" %}
+            {% endif %}
+
+            {% if form.assigned_to.errors %}
+                <div class="text-danger">
+                    {{ form.assigned_to.errors }}
+                </div>
+            {% endif %}
+        </div>
+        <!-- Поле: Комментарий сотрудника -->
+        <div class="mb-3">
+            <label for="{{ form.internal_comment.id_for_label }}" class="form-label">
+                {% trans 'Комментарий сотрудника' %}
+            </label>
+            {% render_field form.internal_comment class="form-control" %}
+            {% if form.internal_comment.errors %}
+                <div class="text-danger">
+                    {{ form.comment.errors }}
+                </div>
+            {% endif %}
+        </div>
 
         <!-- Кнопки -->
         <button type="submit" class="btn btn-primary">{% trans "Сохранить изменения" %}</button>
         <a href="{% url 'customer_support:requests_list' %}" class="btn btn-secondary">{% trans "Отмена" %}</a>
     </form>
+
+    <script>
+        function updateSubjects() {
+            const requestType = document.getElementById("{{ form.request_type.id_for_label }}").value;
+            const subjectField = document.getElementById("{{ form.subject.id_for_label }}");
+            const subjects = {
+        {% for rt, choices in form.instance.SUBJECT_CHOICES.items %}
+            "{{ rt }}": [
+            {% for value, label in choices %}
+                {value: "{{ value }}", label: "{{ label }}"},
+            {% endfor %}
+            ],
+        {% endfor %}
+        };
+
+    // Очищаем и обновляем опции
+    subjectField.innerHTML = '';
+    subjects[requestType].forEach(option => {
+        const opt = document.createElement("option");
+        opt.value = option.value;
+        opt.textContent = option.label;
+        subjectField.appendChild(opt);
+    });
+}
+
+// Инициализация при загрузке страницы
+document.addEventListener("DOMContentLoaded", function() {
+    updateSubjects();
+});
+    </script>
 {% endblock %}
