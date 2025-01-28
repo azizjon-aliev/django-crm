@@ -129,6 +129,18 @@
                 </div>
             {% endif %}
         </div>
+        <!-- Поле: Комментарий сотрудника -->
+        <div class="mb-3">
+            <label for="{{ form.internal_comment.id_for_label }}" class="form-label">
+                {% trans 'Комментарий сотрудника' %}
+            </label>
+            {% render_field form.internal_comment class="form-control" %}
+            {% if form.internal_comment.errors %}
+                <div class="text-danger">
+                    {{ form.comment.errors }}
+                </div>
+            {% endif %}
+        </div>
 
         <!-- Кнопки -->
         <button type="submit" class="btn btn-primary">{% trans "Сохранить изменения" %}</button>
